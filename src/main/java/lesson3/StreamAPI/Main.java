@@ -5,28 +5,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.lang.Math.*;
-import static lesson3.StreamAPI.Student.*;
+import static java.lang.Math.ceil;
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
+import static lesson3.StreamAPI.Student.getRandomSchool;
 
 public class Main {
     public static void main() {
 
-        record StudentGrade(
-            String studentName, // Name of the student associated with the grade
-            String school, // Name of the student’s school
-            String subject, // Name of the subject
-            double score // Score for the subject
-        ) {
-            @Override
-            public double score() {
-                return score;
-            }
-        }
-
         List<Student> students= new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
-            students.add(new Student(Student.getRandomName(), (int) randomValueLong(10, 30, 0), Grade.getRandomGradeList(),getRandomSchool(),Address.getRandomAddress()));
+            students.add(new Student(Student.getRandomName(), (int) randomValueLong(10, 30, 0), Helper.getRandomGradeList(),getRandomSchool(),Helper.getRandomAddress()));
         }
 
         System.out.println();
@@ -39,13 +29,13 @@ public class Main {
             students.stream()
                 .filter(s -> s.age>15 && s.address.city.equals("New York"))
                 .flatMap(s -> {
-                    List<StudentGrade> sg = new ArrayList<>();
+                    List<StudentGradeClass.StudentGrade> sg = new ArrayList<>();
                     for (int i = 0; i < s.grades.size(); i++) {
-                        sg.add(new StudentGrade(s.name,s.school, s.grades.get(i).subject,s.grades.get(i).score));
+                        sg.add(new StudentGradeClass.StudentGrade(s.name,s.school, s.grades.get(i).subject,s.grades.get(i).score));
                     }
                     return sg.stream();
                 })
-                .sorted(Comparator.comparing(StudentGrade::score).reversed())
+                .sorted(Comparator.comparing(StudentGradeClass.StudentGrade::score).reversed())
                 .limit(3)
         );
     }
